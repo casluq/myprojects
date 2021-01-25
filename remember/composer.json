@@ -1,0 +1,15 @@
+{
+    "name": "pichau/remember",
+    "authors": [
+        {
+            "name": "Lucas",
+            "email": "caslu_felipe@hotmail.com"
+        }
+    ],
+    "require": {},
+    "autoload":{
+        "psr-4":{
+            "Api\\": "src/Api/"
+        }
+    }
+}
