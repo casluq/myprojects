@@ -1,0 +1,31 @@
+1st - A API esta INCOMPLETA, ou seja não esta 100% validada.
+2nd - Este código é apenas para relembrar umas coisas em php.
+
+--- How to xcute ---
+
+1 - Baixe e instale o XAMPP
+2 - Abra o XAMPP
+3 - clique em Start no Mysql e no Apache
+4 - Após iniciado acesse localhost/phpmyadmin
+5 - se precisar logar basta informar o login abaixo não precisa de senha
+    3.1 - login: root 
+6 - No menu do topo selecione IMPORTAR
+7 - Selecione o arquivo .sql dentro da pasta remember e clique em OK para criar o
+  banco de dados e a tabela de pessoas
+8 - Caso não tenha o GIT, baixe e instale junto do GitBash
+9 - Vá em C:/xampp/htdocs
+10 - Clique com o botão esquerdo do mouse e selecione a opção "Git Bash Here" para abrir 
+o terminal
+11 - Execute o comando git clone https://github.com/casluq/myprojects.git
+12 - Baixe o composer caso não possua
+13 - Acesse a pasta remember/src
+14 - Execute o comando composer dump-autoload para gerar o autoload
+15 - Utilize o Postman ou outro software para simular as requisições
+
+##Rotas: 
+list (GET) - localhost/remember/src/api/pessoas
+find (GET) - localhost/remember/src/api/pessoas/idPessoa
+create (POST) - localhost/remember/src/api/pessoas
+update (PUT) - localhost/remember/src/api/pessoas/idPessoa
+delete(DELETE) - localhost/remember/src/api/pessoas/idPessoa
+
