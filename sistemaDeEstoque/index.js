@@ -6,6 +6,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const ProductType = require("./app/modulos/ProductType");
+const Product = require("./app/modulos/Product");
+
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -15,14 +18,36 @@ var con = mysql.createConnection({
 
 //Tipos de Produto
 app.get('/produtos/tipos', (req, res) =>{
+    let productType = new ProductType();
 
-    con.query("SELECT * FROM produtos_tipos", (err, rows) =>{
-        if(err)
-            res.status(400).send(err);
-
-        res.send(res.json(rows));
+    productType.list(result =>{
+        if(result.error)
+            res.status(400).send({ msg: "Ocorreu um erro ao listar os produtos." });
+        
+        res.send(result);
     });
+});
 
+app.get('/produtos/tipos/:id', (req, res) =>{
+
+    let idTipo = req.params.id;
+
+    if(isNaN(idTipo) || idTipo < 0){
+        res.send({ msg: "Parametro de rota invalido."})
+    }else{
+        let productType = new ProductType();
+
+        productType.find(idTipo, result =>{
+            if(result.error)
+                res.status(400).send({ msg: "Ocorreu um erro ao listar os produtos." });
+        
+            if(result.length > 0){
+                res.send(result);
+            }else{
+                res.send({ msg: "Produto não encontrado" })
+            }
+       });
+    }
 });
 
 app.post('/produtos/tipos', (req, res) =>{
@@ -35,23 +60,22 @@ app.post('/produtos/tipos', (req, res) =>{
 
     }else{
         //TODO validar dados da requisição
+        let tipoProduto = req.body.tipo;
 
-        let tipo = req.body.tipo;
-
-        if(tipo){
-
-            if(!tipo.name){
+        if(tipoProduto){
+            if(!tipoProduto.name){
                 res.status(400).send({ msg: 'O atribudo name não foi especificado.' });
-            
             }else{
 
-                con.query("INSERT INTO produtos_tipos SET ?", tipo, (err,result) =>{
-                    if(err) res.status(400).send(err);
+                let productType = new ProductType();
+                
+                productType.create(tipoProduto, (result)=>{
+                    if(result.error)  
+                        res.status(400).send({ msg: "Ocorreu um erro ao cadastrar o tipo de produto." });
 
                     res.status(201).send({ msg: "Cadastro realizado com sucesso!" });
-                })
-            
-            }
+                });                  
+            }   
         }else{
             res.status(400).send({ msg: "Formato de dados inválido."});
         }
@@ -75,34 +99,30 @@ app.put('/produtos/tipos/:id', (req, res) =>{
     
         }else{
 
-            let tipo = req.body.tipo;
+            let tipoProduto = req.body.tipo;
 
-            if(tipo){
-                if(!tipo.name){
+            if(tipoProduto){
+
+                if(!tipoProduto.name){
                     res.send({ msg: "O campo nome não foi informado." })
                     return;
                 }
 
-                con.query("SELECT * FROM produtos_tipos WHERE id =  ?", idTipo, (err, rows) =>{
+                let productType = new ProductType;
+                productType.find(idTipo, result =>{
 
-                    if(err){
-                        res.send({
-                            msg: "Ocorreu um erro ao atualizar o tipo de produto.",
-                            err: err
-                        })
-                    }
+                    if(result.length > 0){
 
-                    if(rows.length > 0){
+                        productType.update(tipoProduto, idTipo, result =>{
+                            if(result.error)
+                                res.send({ msg: "Falha ao atualizar o Tipo de Produto" })
 
-                        con.query("UPDATE produtos_tipos SET ? WHERE id = ?", [tipo, idTipo], (err, result) =>{
-                            
                             res.send({ msg: "Tipo de produto atualizado com sucesso." })
                         });
-
                     }else{
                         res.send({ msg: "Falha ao atualizar. Registro não encontrado" });
                     }
-                });
+                });  
 
             }else{
                 res.status(400).send({ msg: "Formato de dados inválido."})
@@ -120,25 +140,23 @@ app.delete('/produtos/tipos/:id', (req, res) =>{
     if(isNaN(idTipo) || idTipo < 0){
         res.send({ msg: "Parametro de rota invalido."})
     }else{
-        con.query("SELECT * FROM produtos_tipos WHERE id = ?", idTipo, (err, rows) =>{
 
-            if(rows.length == 0){
+        let productType = new ProductType;
+        productType.find(idTipo, result =>{
+
+            if(result.length > 0){
+
+                productType.delete(idTipo, result =>{
+                    if(result.error)
+                        res.send({ msg: "Falha ao deletar registro." })
+
+                    res.send({ msg: "Tipo de produto deletado com sucesso." })
+
+                });
+
+            }else{
                 res.send({ msg: "Registro não encontrado" })
-                return;
             }
-
-            con.query("DELETE FROM produtos_tipos WHERE id = ?", idTipo, (err, result) =>{
-                if(err){
-                    res.send({ 
-                        msg: "Ocorreu um erro ao deletar o produto" ,
-                        err: err
-                    })
-                    return;
-                }
-
-                res.send({ msg: "Tipo de produto deletado com sucesso." })
-            })
-
         });
     }
 
@@ -347,5 +365,4 @@ app.delete('/produtos/:id', (req, res) =>{
 });
 
 app.listen(port, () =>{
-    console.log("listening");
 });
