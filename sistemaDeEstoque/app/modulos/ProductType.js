@@ -10,10 +10,6 @@ function createConnection(){
     })
 }
 
-function endConnection(){
-    con.end();
-}
-
 function ProductType(name){
     this.name = name;
 }
@@ -28,7 +24,6 @@ ProductType.prototype.list = callback =>{
         }
     
         callback(rows);
-        endConnection();
     });
 
 }
@@ -40,7 +35,6 @@ ProductType.prototype.find = (id, callback) =>{
         if(err) callback({ error: true, msg: err});
 
         callback(rows);
-        endConnection();
     });
 }
 
@@ -51,7 +45,6 @@ ProductType.prototype.create = (data ,callback) =>{
         if(err) return callback({ error: true, msg: err });
 
         callback({ created: true });
-        endConnection();
     });
 }
 
@@ -61,7 +54,6 @@ ProductType.prototype.update = (data, id, callback) =>{
         if(err) callback({ error: true, msg: err});
 
         callback(result);
-        endConnection();
     });
 };
 
@@ -72,8 +64,6 @@ ProductType.prototype.delete = (id, callback) =>{
         if(err) callback({ error: true, msg: err});
 
         callback(result);
-
-        endConnection();
     });
 };
 

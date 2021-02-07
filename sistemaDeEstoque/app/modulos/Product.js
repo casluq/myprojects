@@ -10,10 +10,6 @@ function createConnection(){
     });    
 }
 
-function endConnection(){
-    con.end();
-}
-
 function Product(name, code, value, estoque_minimo, qtd_em_estoque, id_tipo){
     this.name = name;
     this.code = code;
@@ -31,7 +27,6 @@ Product.prototype.list = callback =>{
         if(err) callback({ error: true, msg: err});
 
         callback(rows);
-        endConnection();
     });
 }
 
@@ -42,7 +37,6 @@ Product.prototype.find = (id, callback) =>{
         if(err) callback({ error: true, msg: err});
 
         callback(rows);
-        endConnection();
     });
 }
 
@@ -53,7 +47,6 @@ Product.prototype.create = (data, callback) =>{
         if(err) callback({ error: true, msg: err});
 
         callback({ created: true });
-        endConnection();
     });
 }
 
@@ -64,7 +57,6 @@ Product.prototype.update = (data, id, callback) =>{
         if(err) callback({ error: true, msg: err});
 
         callback({ created: true });
-        endConnection();
     });
 }
 
@@ -75,7 +67,6 @@ Product.prototype.delete = (id, callback) =>{
         if(err) callback({ error: true, msg: err});
 
         callback(result);
-        endConnection();
     })
 }
 
