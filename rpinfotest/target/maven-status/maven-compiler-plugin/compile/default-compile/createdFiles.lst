@@ -1,0 +1,9 @@
+com\test\rpinfotest\entity\Anotacao.class
+com\test\rpinfotest\repository\OrdemDeServicoRepository.class
+com\test\rpinfotest\controllers\OrdemDeServicoController.class
+com\test\rpinfotest\RpinfotestApplication.class
+com\test\rpinfotest\entity\OrdemDeServico.class
+com\test\rpinfotest\enums\OrdemDeServicoStatus.class
+com\test\rpinfotest\entity\Cliente.class
+com\test\rpinfotest\entity\Endereco.class
+com\test\rpinfotest\entity\Equipamento.class
